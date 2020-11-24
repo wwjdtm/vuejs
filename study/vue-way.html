@@ -9,6 +9,8 @@
     <div id="app"></div>
 
     <script>
+
+
         var div = document.querySelector('#app');
         // div.innerHTML = 'hello world';
         var viewModel = {};
@@ -18,17 +20,31 @@
             //정의할 내용 
         // }) 
 
-        Object.defineProperties(viewModel, 'str', {
-            //속성의 접근했을 때의 동작을 정의
-            get:function(){
-
-            },
-            //속성에 값을 할당했을 때의 동작을 정의
-            set:function(newValue){
-                div.innerHTML = newValue;
+        //즉시실행함수
+        (function(){
+            function init(){
+                Object.defineProperties(viewModel, 'str', {
+                    //속성의 접근했을 때의 동작을 정의
+                    get:function(){},
+                    //속성에 값을 할당했을 때의 동작을 정의
+                    set:function(newValue){
+                        render(newValue);
+                    }
+                });
 
             }
-        })
+
+            function render(value){
+                div.innerHTML = value;
+            }
+
+            init();
+
+        })();
+
+        
+
+        
 
     </script>
 </body>
