@@ -9,8 +9,6 @@
     <div id="app"></div>
 
     <script>
-
-
         var div = document.querySelector('#app');
         // div.innerHTML = 'hello world';
         var viewModel = {};
@@ -21,17 +19,21 @@
         // }) 
 
         //즉시실행함수
-        (function(){
+        (function() {
+
             function init(){
-                Object.defineProperties(viewModel, 'str', {
+
+                Object.defineProperty(viewModel, 'str', {
                     //속성의 접근했을 때의 동작을 정의
-                    get:function(){},
+                    get: function(){ 
+
+                    },
                     //속성에 값을 할당했을 때의 동작을 정의
-                    set:function(newValue){
+                    set: function(newValue){
                         render(newValue);
+                        console.log(newValue,"할당")
                     }
                 });
-
             }
 
             function render(value){
