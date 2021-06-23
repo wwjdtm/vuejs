@@ -1,67 +1,98 @@
-// 컴포넌트는 하나의 부품 ~ 컴포넌트 만들때 확장자 .vue 로 들어감 
-
-//templat 안에 div 들어감
 <template>
-  <!-- <div class="name">{{ name }}</div> -->
-  
-  <!-- <div >{{ name2.id }}</div> -->
+    <div class="container">
 
-  <!-- 바인딩 하는방법. -> 인풋에 name 데이터 넣어줌 -->
-  <!-- input 의 속성 : type, value -- 모두 v-bind 가능 / v-bind 생략가능-->
+        <h2>To-Do List</h2>
+        <!-- submit.prevent 리프레쉬하는 속성을 막음 -->
+        <form @submit.prevent = "onsubmit" >
+            <div class="d-flex">
+                <div class="flex-grow-1 mr-2">
+                    <input class = "form-control " type="text" v-model="todo" placeholder="Type new to-do">
+                </div>
+                <div>
+                    <button class="btn btn-primary" type = "submit">Add</button>
+                </div>
 
-  <!-- v-model: value 양방형  바인딩 + 업데이트 한번에 해줌 -->
-  <input type="text" v-model="name">
-  
-  <!-- v-on -> @ 생략가능 -->
-  <button 
-    class = "btn btn-primary" @click="onsubmit">  Click </button>
+            </div>
+            
 
+            <div v-show="hasError" style="color: red">field empty</div>
+           
+           
+            
+        </form>
+        <div v-if="!todos.length">추가된 todo 가 없습니다</div>
+        <!-- v-for 사용하려면 고유값 있어야됨 .-> key : todo id -->
+        <div v-for = "(todo, index) in todos" class="card mt-2" :key="todo.id">
+            <div class="card-body p-2 d-flex align-items-center">
+                <div class = "form-check flex-grow-1">
+                    <input class = "form-check-input" type="checkbox" v-model="todo.completed">
+                    <label class = "form-check-label" :style="todo.completed ? todoStyle : {}" > {{ todo.subject }}</label>
+                </div>
+
+                <div>
+                    <button class = "btn btn-danger btn-sm"
+                    @click = "deleteTodo(index)"> Delete</button>
+                </div>
+              
+
+            </div>
+
+        </div>
+    </div>
+    
 </template>
 
-// 자바스크립트 작성
 <script>
-// 함수에서 변수값을 변경시켰을때 html 에도 적용이 되도록 하기위해 ref 임포트 , ref로 선언하고, 변수.value로 접근
 import { ref } from 'vue';
-//object 나 array 일때는 reactive 를 임포트함
-import { reactive } from 'vue';
 
-export default {
-  setup() {
-    const name = ref('hussey Kim');
-    const name2 = reactive({
-      id : 2343
-    });
+export default({
+    setup() {
+        const todo = ref('');
+        const todos = ref([
+            // {id : 1, subject : 'ee'}
+            ]);
 
-    // const greeting = (name) => {
-    //   return 'Hello ' + name;
-    // };
-    const onsubmit = () => {
-      console.log(name.value)
-    }
+        const hasError = ref(false);
+        const todoStyle = {
+            textDecoration : 'line-through',
+            color : 'gray'
+        }
 
 
-    // const updatename = (e) => {
-    //   // console.log(e.target.value)
-    //   name.value = e.target.value
-    // } ---------> v.model 로 대체
+        const onsubmit = () => {
+            if ( todo.value ===''){
+                hasError.value = true;
+            } else {
+                
+                todos.value.push({
+                id : Date.now(),
+                subject : todo.value,
+                completed : false
+            });
+            hasError.value = false;
+            todo.value = '';
 
-    //원하는 변수 리턴을 해줘야 template 에서 접근이 가능해짐 
-    return {
-      name,
-      name2,
-      onsubmit,
-      // great
-    };
-  }
-  
-}
+            }
+            
+        }
+
+        const deleteTodo = (index) => {
+            todos.value.splice(index, 1);
+        }
+    
+        return {
+            todo,
+            onsubmit,
+            todos,
+            hasError,
+            todoStyle,
+            deleteTodo
+        };
+    },
+    
+})
 </script>
 
-
-//css 코드
 <style>
-  .name {
-    color : blue;
-  }
 
 </style>
