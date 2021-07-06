@@ -6,9 +6,12 @@
     <v-flex xs6 pa-2>  
       <!-- v-card 는 클래스로 스타일 적용, v-flex 는 그냥 적용 -->
             <!-- 부모에 있는 todolist 를 보내줘야함
-      todoList 라는 값을 todolist 로 받음  -->
+      todoList 라는 값을 :todolist 로 받음 
+      @statusControl 신호를 받으면 statusConstrol함수실행-->
       <List
         :todolist = "todoList"
+        @statusControl = "statusControl"
+        @listDelete = "listDelete"
         />
 
 
@@ -57,6 +60,13 @@ export default {
     listAdd(memo) {
       console.log('get!!!!')
       this.todoList.push({memo : memo , status : "created"})
+    },
+    statusControl(index,status){
+      this.todoList[index].status = status
+    },
+    listDelete(index){
+      // splice - > 그 요소부터 한개를 지움
+      this.todoList.splice(index, 1)
     }
   }
 }
